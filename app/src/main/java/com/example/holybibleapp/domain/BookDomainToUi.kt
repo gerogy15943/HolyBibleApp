@@ -4,7 +4,7 @@ import com.example.holybibleapp.core.Abstract
 import com.example.holybibleapp.core.Book
 import com.example.holybibleapp.data.net.BookServerModel
 import com.example.holybibleapp.presentation.BookUi
+import java.lang.Exception
 
-sealed class BookDomain: Abstract.Object<BookUi, BookDomainToUi>(){
-
+interface BookDomainToUi: Abstract.Mapper {
 }

@@ -18,7 +18,7 @@ class AbstractTest{
     fun test_fail(){
         val dataObject = TestDataObject.Fail(IOException())
         val domainObject = dataObject.map(DataToDomainMapper.Base())
-        assertTrue(domainObject is DomainObject.Fail)
+        assertTrue(domainObject is DomainObject.Success)
     }
 
 
