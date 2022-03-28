@@ -2,4 +2,4 @@ package com.example.holybibleapp.presentation
 
 import com.example.holybibleapp.core.Abstract
 
-sealed class BookUi: Abstract.Object<Unit, Abstract.Mapper.Empty>()
+sealed class BooksUi: Abstract.Object<Unit, Abstract.Mapper.Empty>()
