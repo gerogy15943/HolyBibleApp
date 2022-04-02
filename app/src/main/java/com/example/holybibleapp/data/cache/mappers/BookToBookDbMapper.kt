@@ -5,10 +5,10 @@ import com.example.holybibleapp.core.Book
 import com.example.holybibleapp.data.cache.room.BookDb
 
 interface BookToBookDbMapper: Abstract.Mapper {
-    fun map(id: Int, name: String): BookDb
+    fun map(id: String, name: String): BookDb
 
     class Base(): BookToBookDbMapper {
-        override fun map(id: Int, name: String): BookDb {
+        override fun map(id: String, name: String): BookDb {
             return BookDb(id, name)
         }
     }

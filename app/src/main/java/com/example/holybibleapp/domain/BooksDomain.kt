@@ -1,5 +1,6 @@
 package com.example.holybibleapp.domain
 
+import android.util.Log
 import com.example.holybibleapp.core.Abstract
 import com.example.holybibleapp.core.Book
 import com.example.holybibleapp.presentation.BooksUi
@@ -16,6 +17,7 @@ sealed class BooksDomain: Abstract.Object<BooksUi, BooksDomainToBooksUiMapper>()
 
     class Fail(private val e: Exception): BooksDomain(){
         override fun map(mapper: BooksDomainToBooksUiMapper): BooksUi {
+            Log.d("TAG", e.toString())
             val error = when(e){
                 is UnknownHostException -> ErrorType.NO_CONNNECTION
                 is HttpException -> ErrorType.SERVICE_UNAVALAIBLE

@@ -5,14 +5,14 @@ import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
 import com.example.holybibleapp.data.net.BooksCloudDataSource
 import java.lang.Exception
 
-interface BookRepository {
+interface BooksRepository {
     suspend fun fetchBooks(): BooksData
 
     class Base(private val booksCloudDataSource: BooksCloudDataSource,
                private val booksCloudMapper: BooksCloudMapper,
                private val booksCacheDataSource: BooksCacheDataSource,
                private val booksCacheMapper: BooksCacheMapper
-    ): BookRepository {
+    ): BooksRepository {
         override suspend fun fetchBooks(): BooksData {
             try{
                 val booksCacheList = booksCacheDataSource.fetchBooks()

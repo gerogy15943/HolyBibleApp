@@ -10,7 +10,7 @@ import com.example.holybibleapp.data.cache.mappers.BookDbToBookMapper
 @Entity
 data class BookDb(
     @PrimaryKey
-    val id: Int,
+    val id: String,
     @ColumnInfo
     val name: String
 ): Abstract.Object<Book, BookDbToBookMapper>() {
