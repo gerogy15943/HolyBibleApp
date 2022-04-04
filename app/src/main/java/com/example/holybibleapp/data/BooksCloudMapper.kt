@@ -8,7 +8,7 @@ import com.example.holybibleapp.data.net.BookServerToBookMapper
 interface BooksCloudMapper: Abstract.Mapper {
     fun map(cloudList: List<BookServerModel>): List<Book>
 
-    class Base(private val bookServerToBookMapper: BookServerToBookMapper): BooksCloudMapper{
+    class   Base(private val bookServerToBookMapper: BookServerToBookMapper): BooksCloudMapper{
         override fun map(cloudList: List<BookServerModel>): List<Book> {
             return cloudList.map {
                 it.map(bookServerToBookMapper)
