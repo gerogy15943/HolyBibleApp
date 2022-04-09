@@ -3,31 +3,69 @@ package com.example.holybibleapp.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.holybibleapp.R
-import com.example.holybibleapp.core.Book
 
-class BibleAdapter: RecyclerView.Adapter<BibleAdapter.BibleViewHolder>() {
+class BibleAdapter(private val tryAgainClick: TryAgainClick): RecyclerView.Adapter<BibleAdapter.BibleViewHolder>() {
 
-    inner class BibleViewHolder(view: View): RecyclerView.ViewHolder(view){
-        fun bind(book: Book){
-            itemView.findViewById<TextView>(R.id.textView).text = book.name
+    abstract class BibleViewHolder(view: View): RecyclerView.ViewHolder(view){
+        open fun bind(book: BookUi){
+        }
+
+        class FullScreenProgress(view: View): BibleViewHolder(view)
+
+        class Base(view: View): BibleViewHolder(view){
+            private val book_name_tv = itemView.findViewById<TextView>(R.id.book_name_tv)
+            override fun bind(book: BookUi) {
+                book.map(object: BookUi.StringMapper{
+                    override fun map(text: String) {
+                        book_name_tv.text = text
+                    }
+                })
+            }
+        }
+
+        class Fail(view: View, private val tryAgainClick: TryAgainClick): BibleViewHolder(view){
+            private val fail_message_tv = itemView.findViewById<TextView>(R.id.fail_message_tv)
+            private val fail_try_again_btn = itemView.findViewById<Button>(R.id.fail_try_again_btn)
+            override fun bind(book: BookUi) {
+                book.map(object: BookUi.StringMapper{
+                    override fun map(text: String) {
+                        fail_message_tv.text = text
+                    }
+                })
+            fail_try_again_btn.setOnClickListener {
+                tryAgainClick.click()
+            }
+            }
         }
     }
 
-    fun update(newList: List<Book>){
+    fun update(newList: List<BookUi>){
         books.clear()
         books.addAll(newList)
         notifyDataSetChanged()
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return when (books[position]){
+            is BookUi.Base -> 0
+            is BookUi.Fail -> 1
+            is BookUi.Progress -> 2
+        }
+    }
 
-    private val books = ArrayList<Book>()
+    private val books = ArrayList<BookUi>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BibleViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.book_layout, parent, false)
-        return BibleViewHolder(view)
+        val viewHolder = when(viewType) {
+            0 -> BibleViewHolder.Base(R.layout.book_layout.getView(parent))
+            1 -> BibleViewHolder.Fail(R.layout.fail_fullscreen.getView(parent), tryAgainClick)
+            else -> BibleViewHolder.FullScreenProgress(R.layout.progress_fullscreen.getView(parent))
+        }
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: BibleViewHolder, position: Int) {
@@ -37,4 +75,10 @@ class BibleAdapter: RecyclerView.Adapter<BibleAdapter.BibleViewHolder>() {
     override fun getItemCount(): Int {
         return books.size
     }
+
+    interface TryAgainClick{
+        fun click()
+    }
+
+    private fun Int.getView(parent: ViewGroup) = LayoutInflater.from(parent.context).inflate(this, parent, false)
 }

@@ -1,19 +1,12 @@
 package com.example.holybibleapp.data
 
 import com.example.holybibleapp.core.Book
-import com.example.holybibleapp.data.cache.mappers.BookDbToBookMapper
+import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
 import com.example.holybibleapp.data.cache.mappers.BookToBookDbMapper
-import com.example.holybibleapp.data.cache.mappers.BooksCacheDataSource
-import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
-import com.example.holybibleapp.data.cache.room.BookDb
-import com.example.holybibleapp.data.net.BookServerModel
-import com.example.holybibleapp.data.net.BookServerToBookMapper
-import com.example.holybibleapp.data.net.BooksCloudDataSource
+import com.example.holybibleapp.data.net.BookServerToDataMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import java.io.IOException
-import java.net.UnknownHostException
 
 class BookRepositorySaveBooksTest: BaseBooksRepositoryTest(){
 
@@ -23,9 +16,9 @@ class BookRepositorySaveBooksTest: BaseBooksRepositoryTest(){
         val testCacheDataSource = TestCacheDataSource(BookToBookDbMapper.Base())
         val repository = BooksRepository.Base(
             testCloudDataSource,
-            TestBooksCloudMapper(BookServerToBookMapper.Base()),
+            TestBooksCloudMapper(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            TestBooksCacheMapper(BookDbToBookMapper.Base(), BookToBookDbMapper.Base())
+            TestBooksCacheMapper(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
         )
 
         val actualCloud = repository.fetchBooks()

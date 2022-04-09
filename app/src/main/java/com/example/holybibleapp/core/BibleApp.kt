@@ -3,22 +3,20 @@ package com.example.holybibleapp.core
 import android.app.Application
 import com.example.holybibleapp.data.BooksRepository
 import com.example.holybibleapp.data.BooksCloudMapper
-import com.example.holybibleapp.data.cache.mappers.BookDbToBookMapper
-import com.example.holybibleapp.data.cache.mappers.BookToBookDbMapper
-import com.example.holybibleapp.data.cache.mappers.BooksCacheDataSource
+import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
+import com.example.holybibleapp.data.cache.BooksCacheDataSource
+import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
 import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
 import com.example.holybibleapp.data.cache.room.AppDatabase
 import com.example.holybibleapp.data.cache.room.RoomProvider
-import com.example.holybibleapp.data.net.BookServerToBookMapper
+import com.example.holybibleapp.data.net.BookServerToDataMapper
 import com.example.holybibleapp.data.net.BookService
 import com.example.holybibleapp.data.net.BooksCloudDataSource
+import com.example.holybibleapp.domain.BaseBookDataToDomainMapper
 import com.example.holybibleapp.domain.BaseBooksDataToDomainMapper
 import retrofit2.Retrofit
 import com.example.holybibleapp.domain.BooksInteractor
-import com.example.holybibleapp.presentation.BaseBooksDomainMapper
-import com.example.holybibleapp.presentation.BooksCommunication
-import com.example.holybibleapp.presentation.MainViewModel
-import com.example.holybibleapp.presentation.ResourceProvider
+import com.example.holybibleapp.presentation.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.converter.gson.GsonConverterFactory
@@ -55,11 +53,11 @@ class BibleApp: Application() {
 
         AppDatabase.initDatabase(applicationContext)
 
-        val bookDbToBookMapper = BookDbToBookMapper.Base()
-        val bookToBookDbMapper = BookToBookDbMapper.Base()
-        val booksCacheMapper = BooksCacheMapper.Base(bookDbToBookMapper, bookToBookDbMapper)
+        val bookDbToBookMapper = BookDbToDataMapper.Base()
+        val bookDataToDbMapper = BookDataToDbMapper.Base()
+        val booksCacheMapper = BooksCacheMapper.Base(bookDbToBookMapper, bookDataToDbMapper)
         val booksCloudDataSource = BooksCloudDataSource.Base(service)
-        val bookServerToBookMapper = BookServerToBookMapper.Base()
+        val bookServerToBookMapper = BookServerToDataMapper.Base()
         val booksCloudMapper = BooksCloudMapper.Base(bookServerToBookMapper)
         val roomProvider = RoomProvider.Base()
         val booksCacheDataSource = BooksCacheDataSource.Base(roomProvider,booksCacheMapper)
@@ -71,9 +69,9 @@ class BibleApp: Application() {
             booksCacheDataSource,
             booksCacheMapper
         )
-        val booksInteractor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper())
+        val booksInteractor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper(BaseBookDataToDomainMapper()))
         mainViewModel = MainViewModel(booksInteractor,
-            BaseBooksDomainMapper(booksCommunication, ResourceProvider.Base(applicationContext)), booksCommunication
+            BaseBooksDomainToUiMapper(ResourceProvider.Base(applicationContext), BaseBookDomainToUiMapper()), booksCommunication
         )
     }
     }

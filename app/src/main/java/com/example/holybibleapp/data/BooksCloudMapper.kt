@@ -1,17 +1,16 @@
 package com.example.holybibleapp.data
 
 import com.example.holybibleapp.core.Abstract
-import com.example.holybibleapp.core.Book
 import com.example.holybibleapp.data.net.BookServerModel
-import com.example.holybibleapp.data.net.BookServerToBookMapper
+import com.example.holybibleapp.data.net.BookServerToDataMapper
 
 interface BooksCloudMapper: Abstract.Mapper {
-    fun map(cloudList: List<BookServerModel>): List<Book>
+    fun map(cloudList: List<BookServerModel>): List<BookData>
 
-    class   Base(private val bookServerToBookMapper: BookServerToBookMapper): BooksCloudMapper{
-        override fun map(cloudList: List<BookServerModel>): List<Book> {
+    class Base(private val bookServerToDataMapper: BookServerToDataMapper): BooksCloudMapper{
+        override fun map(cloudList: List<BookServerModel>): List<BookData> {
             return cloudList.map {
-                it.map(bookServerToBookMapper)
+                it.map(bookServerToDataMapper)
             }
         }
 

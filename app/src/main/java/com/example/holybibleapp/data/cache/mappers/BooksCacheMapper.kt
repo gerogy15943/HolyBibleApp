@@ -1,24 +1,24 @@
 package com.example.holybibleapp.data.cache.mappers
 
 import com.example.holybibleapp.core.Abstract
-import com.example.holybibleapp.core.Book
+import com.example.holybibleapp.data.BookData
 import com.example.holybibleapp.data.cache.room.BookDb
 
 interface BooksCacheMapper: Abstract.Mapper {
-    fun mapToBook(list: List<BookDb>): List<Book>
-    fun mapToBookDb(list: List<Book>): List<BookDb>
+    fun mapToData(list: List<BookDb>): List<BookData>
+    fun mapToBookDb(list: List<BookData>): List<BookDb>
 
-    class Base(val bookDbToBookMapper: BookDbToBookMapper,
-            val bookToBookDbMapper: BookToBookDbMapper): BooksCacheMapper {
-        override fun mapToBook(list: List<BookDb>): List<Book> {
+    class Base(val bookDbToDataMapper: BookDbToDataMapper,
+               val bookDataToDbMapper: BookDataToDbMapper): BooksCacheMapper {
+        override fun mapToData(list: List<BookDb>): List<BookData> {
             return list.map {
-                it.map(bookDbToBookMapper)
+                it.map(bookDbToDataMapper)
             }
         }
 
-        override fun mapToBookDb(list: List<Book>): List<BookDb> {
+        override fun mapToBookDb(list: List<BookData>): List<BookDb> {
             return list.map {
-                bookToBookDbMapper.map(it.id, it.name)
+                it.mapTo(bookDataToDbMapper)
             }
         }
 

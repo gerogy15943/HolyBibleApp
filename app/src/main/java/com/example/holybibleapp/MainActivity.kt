@@ -18,14 +18,15 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-        val adapter = BibleAdapter()
+        val adapter = BibleAdapter(object: BibleAdapter.TryAgainClick{
+            override fun click() {
+                viewModel.fetchBooks()
+            }
+        })
         recyclerView.adapter = adapter
 
         viewModel.observe(this, Observer {
             adapter.update(it)
-        })
-        viewModel.observeFail(this, Observer {
-            Log.d("TAG", it)
         })
         viewModel.fetchBooks()
     }

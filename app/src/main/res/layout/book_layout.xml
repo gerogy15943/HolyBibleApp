@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
-    android:id="@+id/textView"
+    android:id="@+id/book_name_tv"
     android:padding="@dimen/padding8"
     android:text="Genesis"
     style="@style/TextAppearance.AppCompat.Body1"

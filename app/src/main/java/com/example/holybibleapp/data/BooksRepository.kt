@@ -1,8 +1,9 @@
 package com.example.holybibleapp.data
 
-import com.example.holybibleapp.data.cache.mappers.BooksCacheDataSource
+import com.example.holybibleapp.data.cache.BooksCacheDataSource
 import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
 import com.example.holybibleapp.data.net.BooksCloudDataSource
+import kotlinx.coroutines.delay
 import java.lang.Exception
 
 interface BooksRepository {
@@ -15,6 +16,7 @@ interface BooksRepository {
     ): BooksRepository {
         override suspend fun fetchBooks(): BooksData {
             try{
+                delay(3000)
                 val booksCacheList = booksCacheDataSource.fetchBooks()
                 if(booksCacheList.isEmpty()){
                     val booksCloudList = booksCloudDataSource.getBooks()
@@ -23,7 +25,7 @@ interface BooksRepository {
                     return BooksData.Success(books)
                 }
                 else{
-                    return BooksData.Success(booksCacheMapper.mapToBook(booksCacheList))
+                    return BooksData.Success(booksCacheMapper.mapToData(booksCacheList))
                 }
             } catch (e: Exception){return BooksData.Fail(e)}
         }

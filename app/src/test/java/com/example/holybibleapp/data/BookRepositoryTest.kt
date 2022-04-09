@@ -1,18 +1,17 @@
 package com.example.holybibleapp.data
 
 import com.example.holybibleapp.core.Book
-import com.example.holybibleapp.data.cache.mappers.BookDbToBookMapper
+import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
 import com.example.holybibleapp.data.cache.mappers.BookToBookDbMapper
-import com.example.holybibleapp.data.cache.mappers.BooksCacheDataSource
+import com.example.holybibleapp.data.cache.BooksCacheDataSource
 import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
 import com.example.holybibleapp.data.cache.room.BookDb
 import com.example.holybibleapp.data.net.BookServerModel
-import com.example.holybibleapp.data.net.BookServerToBookMapper
+import com.example.holybibleapp.data.net.BookServerToDataMapper
 import com.example.holybibleapp.data.net.BooksCloudDataSource
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
-import retrofit2.HttpException
 import java.io.IOException
 import java.net.UnknownHostException
 
@@ -26,9 +25,9 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
         val testCacheDataSource = TestCacheDataSource(false)
         val repository = BooksRepository.Base(
             testCloudDataSource,
-            BooksCloudMapper.Base(BookServerToBookMapper.Base()),
+            BooksCloudMapper.Base(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            BooksCacheMapper.Base(BookDbToBookMapper.Base(), BookToBookDbMapper.Base())
+            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()
@@ -43,9 +42,9 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
         val testCacheDataSource = TestCacheDataSource(false)
         val repository = BooksRepository.Base(
             testCloudDataSource,
-            BooksCloudMapper.Base(BookServerToBookMapper.Base()),
+            BooksCloudMapper.Base(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            BooksCacheMapper.Base(BookDbToBookMapper.Base(), BookToBookDbMapper.Base())
+            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()
@@ -58,9 +57,9 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
         val testCacheDataSource = TestCacheDataSource(true)
         val repository = BooksRepository.Base(
             testCloudDataSource,
-            BooksCloudMapper.Base(BookServerToBookMapper.Base()),
+            BooksCloudMapper.Base(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            BooksCacheMapper.Base(BookDbToBookMapper.Base(), BookToBookDbMapper.Base())
+            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()
@@ -73,9 +72,9 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
         val testCacheDataSource = TestCacheDataSource(true)
         val repository = BooksRepository.Base(
             testCloudDataSource,
-            TestBooksCloudMapper(BookServerToBookMapper.Base()),
+            TestBooksCloudMapper(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            TestBooksCacheMapper(BookDbToBookMapper.Base(), BookToBookDbMapper.Base())
+            TestBooksCacheMapper(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()

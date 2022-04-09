@@ -1,18 +1,20 @@
 package com.example.holybibleapp.data
 
 import com.example.holybibleapp.core.Book
-import com.example.holybibleapp.data.cache.mappers.BookDbToBookMapper
+import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
 import com.example.holybibleapp.data.cache.mappers.BookToBookDbMapper
-import com.example.holybibleapp.data.cache.mappers.BooksCacheDataSource
+import com.example.holybibleapp.data.cache.BooksCacheDataSource
+import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
 import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
 import com.example.holybibleapp.data.cache.room.BookDb
 import com.example.holybibleapp.data.net.BookServerModel
-import com.example.holybibleapp.data.net.BookServerToBookMapper
+import com.example.holybibleapp.data.net.BookServerToDataMapper
 import com.example.holybibleapp.data.net.BooksCloudDataSource
 
 abstract class BaseBooksRepositoryTest {
 
-    protected inner class TestCacheDataSource(private val mapper: BookToBookDbMapper) : BooksCacheDataSource {
+    protected inner class TestCacheDataSource(private val mapper: BookDataToDbMapper) :
+        BooksCacheDataSource {
 
         private val listDb = ArrayList<BookDb>()
 
@@ -20,7 +22,7 @@ abstract class BaseBooksRepositoryTest {
             return listDb
         }
 
-        override fun saveBooks(list: List<Book>) {
+        override fun saveBooks(list: List<BookData>) {
             val result = list.map {
                 mapper.map(it.id, it.name + "db")
             }
@@ -31,20 +33,20 @@ abstract class BaseBooksRepositoryTest {
     }
 
 
-    protected inner class TestBooksCloudMapper(private val bookServerToBookMapper: BookServerToBookMapper): BooksCloudMapper{
+    protected inner class TestBooksCloudMapper(private val bookServerToDataMapper: BookServerToDataMapper): BooksCloudMapper{
         override fun map(cloudList: List<BookServerModel>): List<Book> {
             return cloudList.map {
-                it.map(bookServerToBookMapper)
+                it.map(bookServerToDataMapper)
             }
         }
     }
 
-   protected inner class TestBooksCacheMapper(val bookDbToBookMapper: BookDbToBookMapper,
-                                     val bookToBookDbMapper: BookToBookDbMapper
+   protected inner class TestBooksCacheMapper(val bookDbToDataMapper: BookDbToDataMapper,
+                                              val bookToBookDbMapper: BookToBookDbMapper
     ): BooksCacheMapper {
-        override fun mapToBook(list: List<BookDb>): List<Book> {
+        override fun mapToData(list: List<BookDb>): List<Book> {
             return list.map {
-                it.map(bookDbToBookMapper)
+                it.map(bookDbToDataMapper)
             }
         }
 
