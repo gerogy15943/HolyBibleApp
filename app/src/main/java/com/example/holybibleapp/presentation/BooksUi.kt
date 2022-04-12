@@ -7,8 +7,8 @@ import com.example.holybibleapp.domain.BookDomainToUiMapper
 import com.example.holybibleapp.domain.ErrorType
 
 sealed class BooksUi: Abstract.Object<Unit, BooksCommunication>{
-    class Suceess(private val list: List<BookDomain>,
-                  private val bookDomainToUiMapper: BookDomainToUiMapper ): BooksUi() {
+    data class Success(private val list: List<BookDomain>,
+                       private val bookDomainToUiMapper: BookDomainToUiMapper ): BooksUi() {
         override fun map(mapper: BooksCommunication) {
             val listBookUi = list.map {
                 it.map(bookDomainToUiMapper)
@@ -18,7 +18,7 @@ sealed class BooksUi: Abstract.Object<Unit, BooksCommunication>{
 
     }
 
-    class Fail(private val errorType: ErrorType,
+    data class Fail(private val errorType: ErrorType,
                 private val resourceProvider: ResourceProvider): BooksUi() {
         override fun map(mapper: BooksCommunication) {
             val messageId = when(errorType){

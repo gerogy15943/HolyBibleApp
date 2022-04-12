@@ -1,8 +1,6 @@
 package com.example.holybibleapp.data
 
-import com.example.holybibleapp.core.Book
 import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
-import com.example.holybibleapp.data.cache.mappers.BookToBookDbMapper
 import com.example.holybibleapp.data.cache.BooksCacheDataSource
 import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
 import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
@@ -13,7 +11,7 @@ import com.example.holybibleapp.data.net.BooksCloudDataSource
 
 abstract class BaseBooksRepositoryTest {
 
-    protected inner class TestCacheDataSource(private val mapper: BookDataToDbMapper) :
+    protected inner class TestCacheDataSource(private val mapper: BooksCacheMapper) :
         BooksCacheDataSource {
 
         private val listDb = ArrayList<BookDb>()
@@ -22,10 +20,12 @@ abstract class BaseBooksRepositoryTest {
             return listDb
         }
 
+        override fun fetchSortBooks(): List<BookDb> {
+            return listDb
+        }
+
         override fun saveBooks(list: List<BookData>) {
-            val result = list.map {
-                mapper.map(it.id, it.name + "db")
-            }
+            val result = mapper.mapToBookDb(list)
             listDb.clear()
             listDb.addAll(result)
         }

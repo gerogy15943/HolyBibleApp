@@ -8,14 +8,17 @@ sealed class BookUi: Abstract.Object<Unit, BookUi.StringMapper> {
 
     object Progress: BookUi()
 
-    class Base(
+    abstract class Info(
         private val id: String,
-        private val name: String
-    ): BookUi() {
+        private val name: String): BookUi(){
         override fun map(mapper: StringMapper) {
             mapper.map(name)
         }
-    }
+        }
+
+    class Base(id: String, name: String): Info(id,name)
+
+    class Testament(id: String, name: String): Info(id, name)
 
     class Fail(private val message: String): BookUi() {
         override fun map(mapper: StringMapper) {

@@ -13,6 +13,5 @@ interface BooksCloudMapper: Abstract.Mapper {
                 it.map(bookServerToDataMapper)
             }
         }
-
     }
 }

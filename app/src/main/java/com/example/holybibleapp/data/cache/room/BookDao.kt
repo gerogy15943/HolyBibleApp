@@ -10,6 +10,9 @@ interface BookDao {
     @Query("SELECT * FROM bookDb")
     fun fetchBooks(): List<BookDb>
 
+    @Query("SELECT * FROM bookdb ORDER BY testament DESC")
+    fun fetchSortBooks(): List<BookDb>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(list: List<BookDb>)
 }

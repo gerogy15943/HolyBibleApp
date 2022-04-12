@@ -12,9 +12,12 @@ data class BookDb(
     @PrimaryKey
     val id: String,
     @ColumnInfo
-    val name: String
+    val name: String,
+    @ColumnInfo
+    val testament: String
+
 ): Abstract.Object<BookData, BookDbToDataMapper> {
     override fun map(toBookDbToDataMapper: BookDbToDataMapper): BookData {
-        return toBookDbToDataMapper.map(id, name)
+        return toBookDbToDataMapper.map(id, name, testament)
     }
 }

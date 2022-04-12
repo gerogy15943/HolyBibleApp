@@ -53,7 +53,9 @@ class BibleAdapter(private val tryAgainClick: TryAgainClick): RecyclerView.Adapt
         return when (books[position]){
             is BookUi.Base -> 0
             is BookUi.Fail -> 1
-            is BookUi.Progress -> 2
+            is BookUi.Testament -> 2
+            is BookUi.Progress -> 3
+            else -> -1
         }
     }
 
@@ -63,6 +65,7 @@ class BibleAdapter(private val tryAgainClick: TryAgainClick): RecyclerView.Adapt
         val viewHolder = when(viewType) {
             0 -> BibleViewHolder.Base(R.layout.book_layout.getView(parent))
             1 -> BibleViewHolder.Fail(R.layout.fail_fullscreen.getView(parent), tryAgainClick)
+            2 -> BibleViewHolder.Base(R.layout.testament_layout.getView(parent))
             else -> BibleViewHolder.FullScreenProgress(R.layout.progress_fullscreen.getView(parent))
         }
         return viewHolder

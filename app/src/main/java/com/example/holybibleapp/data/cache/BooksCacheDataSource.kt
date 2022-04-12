@@ -8,6 +8,8 @@ import com.example.holybibleapp.data.cache.room.RoomProvider
 interface BooksCacheDataSource {
     fun fetchBooks(): List<BookDb>
 
+    fun fetchSortBooks(): List<BookDb>
+
     fun saveBooks(list: List<BookData>)
 
     class Base(private val roomProvider: RoomProvider,
@@ -21,6 +23,10 @@ interface BooksCacheDataSource {
         override fun saveBooks(list: List<BookData>) {
             val bookDao = roomProvider.provide()?.BookDao()
             bookDao?.insert(booksCacheMapper.mapToBookDb(list))
+        }
+        override fun fetchSortBooks(): List<BookDb> {
+            val bookDao = roomProvider.provide()?.BookDao()
+            return bookDao?.fetchSortBooks() ?: emptyList()
         }
     }
 }

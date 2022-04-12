@@ -1,9 +1,15 @@
 package com.example.holybibleapp.presentation
 
+import com.example.holybibleapp.R
 import com.example.holybibleapp.domain.BookDomainToUiMapper
+import com.example.holybibleapp.domain.TestamentType
 
-class BaseBookDomainToUiMapper: BookDomainToUiMapper {
+class BaseBookDomainToUiMapper(private val resourceProvider: ResourceProvider): BookDomainToUiMapper {
     override fun map(id: String, name: String): BookUi {
-        return BookUi.Base(id, name)
+        return when (id){
+            TestamentType.OLD.getId() -> BookUi.Testament(id, resourceProvider.getStringRes(R.string.old_testament))
+            TestamentType.NEW.getId() -> BookUi.Testament(id, resourceProvider.getStringRes(R.string.new_testament))
+            else -> BookUi.Base(id, name)
+        }
     }
 }

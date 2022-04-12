@@ -6,15 +6,19 @@ import com.example.holybibleapp.data.cache.room.BookDb
 import com.example.holybibleapp.domain.BookDomain
 import kotlinx.coroutines.internal.LockFreeLinkedListNode
 
-class BookData(private val id: String, private val name: String):
+class BookData(private val id: String, private val name: String, private val testament: String):
     ToBookDb<BookDb,BookDataToDbMapper>,
     Abstract.Object<BookDomain, BookDataToDomainMapper>{
     override fun map(mapper: BookDataToDomainMapper): BookDomain {
-        return mapper.map(id, name)
+        return mapper.map(id, name, testament)
     }
 
     override fun mapTo(mapper: BookDataToDbMapper): BookDb {
-        return mapper.map(id, name)
+        return mapper.map(id, name, testament)
+    }
+
+    fun compareTestament(cTestament: String): Boolean{
+        return testament == cTestament
     }
 }
 interface ToBookDb<T, M: Abstract.Mapper>{

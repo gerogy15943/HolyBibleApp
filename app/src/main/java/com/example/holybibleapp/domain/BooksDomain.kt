@@ -13,9 +13,17 @@ sealed class BooksDomain: Abstract.Object<BooksUi, BooksDomainToBooksUiMapper>{
     class Success(private val list: List<BookData>,
                   private val bookDataToDomain: BookDataToDomainMapper): BooksDomain() {
         override fun map(mapper: BooksDomainToBooksUiMapper): BooksUi {
-            return mapper.map(list.map {
-                it.map(bookDataToDomain)
-            })
+            val data = mutableListOf<BookDomain>()
+            val ot = "OT"
+            val nt = "NT"
+            data.add(BookDomain.Testament(TestamentType.OLD))
+            for(i in 0 until list.size){
+                if(list.get(i).compareTestament(ot) && list.get(i+1).compareTestament(nt))
+                    data.add(BookDomain.Testament(TestamentType.NEW))
+                else
+                    data.add(list.get(i).map(bookDataToDomain))
+            }
+            return mapper.map(data)
         }
     }
 

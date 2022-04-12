@@ -8,7 +8,7 @@ import com.example.holybibleapp.domain.ErrorType
 class BaseBooksDomainToUiMapper(private val resourceProvider: ResourceProvider,
                                 private val bookDomainToUiMapper: BookDomainToUiMapper): BooksDomainToBooksUiMapper {
     override fun map(list: List<BookDomain>): BooksUi {
-        return BooksUi.Suceess(list,bookDomainToUiMapper)
+        return BooksUi.Success(list,bookDomainToUiMapper)
     }
 
     override fun map(error: ErrorType): BooksUi {
