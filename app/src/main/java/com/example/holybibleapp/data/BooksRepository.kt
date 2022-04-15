@@ -2,6 +2,7 @@ package com.example.holybibleapp.data
 
 import com.example.holybibleapp.data.cache.BooksCacheDataSource
 import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
+import com.example.holybibleapp.data.cache.room.BookDb
 import com.example.holybibleapp.data.net.BooksCloudDataSource
 import kotlinx.coroutines.delay
 import java.lang.Exception
@@ -19,7 +20,7 @@ interface BooksRepository {
                 val booksCloudList = booksCloudDataSource.getBooks()
                 val books = booksCloudMapper.map(booksCloudList)
                 booksCacheDataSource.saveBooks(books)
-                val booksCacheList = booksCacheDataSource.fetchSortBooks()
+                val booksCacheList = booksCacheDataSource.fetchBooks()
                 return BooksData.Success(booksCacheMapper.mapToData(booksCacheList))
             } catch (e: Exception){return BooksData.Fail(e)}
         }

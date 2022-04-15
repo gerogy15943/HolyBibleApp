@@ -1,8 +1,8 @@
 package com.example.holybibleapp.data
 
-import com.example.holybibleapp.core.Book
+import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
 import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
-import com.example.holybibleapp.data.cache.mappers.BookToBookDbMapper
+import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
 import com.example.holybibleapp.data.net.BookServerToDataMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -13,31 +13,30 @@ class BookRepositorySaveBooksTest: BaseBooksRepositoryTest(){
     @Test
     fun test_save_books() = runBlocking {
         val testCloudDataSource = TestCloudDataSource()
-        val testCacheDataSource = TestCacheDataSource(BookToBookDbMapper.Base())
+        val bookDbToDataMapper = BookDbToDataMapper.Base()
+        val bookDataToDbMapper = BookDataToDbMapper.Base()
+        val testBooksCacheMapper = BooksCacheMapper.Base(bookDbToDataMapper, bookDataToDbMapper)
+        val testCacheDataSource = TestCacheDataSource(BooksCacheMapper.Base(bookDbToDataMapper, bookDataToDbMapper))
         val repository = BooksRepository.Base(
             testCloudDataSource,
             TestBooksCloudMapper(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            TestBooksCacheMapper(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
-        )
+            testBooksCacheMapper)
+        testCacheDataSource.saveBooks(listOf(
+            BookData("0", "name0", "ot"),
+            BookData("1", "name1", "ot"),
+            BookData("2", "name2", "ot")
+        ))
 
         val actualCloud = repository.fetchBooks()
         val expectedCloud = BooksData.Success(listOf(
-            Book("0", "name0"),
-            Book("1", "name1"),
-            Book("2", "name2"),
+            BookData("0", "name0", "ot"),
+            BookData("1", "name1", "ot"),
+            BookData("2", "name2", "ot")
         ))
 
         Assert.assertEquals(expectedCloud, actualCloud)
 
-        val actualCache = repository.fetchBooks()
-        val expectedCache = BooksData.Success(listOf(
-            Book("0", "name0db"),
-            Book("1", "name1db"),
-            Book("2", "name2db"),
-        ))
-
-        Assert.assertEquals(expectedCache, actualCache)
     }
 
 }

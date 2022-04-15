@@ -13,17 +13,9 @@ sealed class BookDomain(): Abstract.Object<BookUi, BookDomainToUiMapper> {
 
     data class Testament(private val type: TestamentType): BookDomain(){
         override fun map(mapper: BookDomainToUiMapper): BookUi {
-           return mapper.map(type.getId(), type.name)
+           return type.map(mapper)
         }
     }
 
 }
 
-enum class TestamentType(private val id: String){
-    OLD("old"),
-    NEW("new");
-
-    fun getId(): String{
-        return id
-    }
-}

@@ -16,11 +16,10 @@ sealed class BookUi: Abstract.Object<Unit, BookUi.StringMapper> {
         }
         }
 
-    class Base(id: String, name: String): Info(id,name)
+    data class Base(private val id: String, private val name: String): Info(id,name)
+    data class Testament(private val id: String, private val name: String): Info(id, name)
 
-    class Testament(id: String, name: String): Info(id, name)
-
-    class Fail(private val message: String): BookUi() {
+    data class Fail(private val message: String): BookUi() {
         override fun map(mapper: StringMapper) {
             mapper.map(message)
         }

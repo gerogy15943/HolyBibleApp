@@ -1,9 +1,7 @@
 package com.example.holybibleapp.data
-
-import com.example.holybibleapp.core.Book
 import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
-import com.example.holybibleapp.data.cache.mappers.BookToBookDbMapper
 import com.example.holybibleapp.data.cache.BooksCacheDataSource
+import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
 import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
 import com.example.holybibleapp.data.cache.room.BookDb
 import com.example.holybibleapp.data.net.BookServerModel
@@ -27,7 +25,7 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
             testCloudDataSource,
             BooksCloudMapper.Base(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
+            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookDataToDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()
@@ -44,11 +42,13 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
             testCloudDataSource,
             BooksCloudMapper.Base(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
+            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookDataToDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()
-        val expected = BooksData.Success(listOf(Book("0", "name")))
+        val expected = BooksData.Success(listOf(BookData("0", "name", "ot")))
+
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -59,11 +59,13 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
             testCloudDataSource,
             BooksCloudMapper.Base(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
+            BooksCacheMapper.Base(BookDbToDataMapper.Base(), BookDataToDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()
-        val expected = BooksData.Success(listOf(Book("0", "name")))
+        val expected = BooksData.Success(listOf(BookData("0", "name","ot")))
+
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -74,32 +76,31 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
             testCloudDataSource,
             TestBooksCloudMapper(BookServerToDataMapper.Base()),
             testCacheDataSource,
-            TestBooksCacheMapper(BookDbToDataMapper.Base(), BookToBookDbMapper.Base())
+            TestBooksCacheMapper(BookDbToDataMapper.Base(), BookDataToDbMapper.Base())
         )
 
         val actual = repository.fetchBooks()
         val expected = BooksData.Success(listOf(
-            Book("10", "name10"),
-            Book("11", "name11"),
-            Book("12", "name12")
+            BookData("10", "name10","ot"),
+            BookData("11", "name11", "ot"),
+            BookData("12", "name12", "ot")
         ))
 
         assertEquals(expected, actual)
     }
     inner class TestCacheDataSource(private val returnSuccess: Boolean) : BooksCacheDataSource {
+        private val listDb = mutableListOf<BookDb>()
         override fun fetchBooks(): List<BookDb> {
             if (returnSuccess) {
-                return listOf(
-                    BookDb("10", "name10"),
-                    BookDb("11", "name11"),
-                    BookDb("12", "name12")
-                )
+                return listDb
             } else
                 return emptyList()
         }
 
-        override fun saveBooks(list: List<Book>) {
-            //todo
+        override fun saveBooks(list: List<BookData>) {
+            listDb.add(BookDb("10", "name10", "ot"))
+            listDb.add(BookDb("11", "name11", "ot"))
+            listDb.add(BookDb("12", "name12", "ot"))
         }
 
     }
@@ -111,9 +112,9 @@ class BookRepositoryTest: BaseBooksRepositoryTest() {
         override suspend fun getBooks(): List<BookServerModel> {
             if (returnSuccess)
                 return listOf(
-                    BookServerModel("0", "name0"),
-                    BookServerModel("1", "name1"),
-                    BookServerModel("2", "name2"),
+                    BookServerModel("0", "name0", "ot"),
+                    BookServerModel("1", "name1", "ot"),
+                    BookServerModel("2", "name2", "ot"),
                 )
             else {
                 if (errorTypeNoConnection)

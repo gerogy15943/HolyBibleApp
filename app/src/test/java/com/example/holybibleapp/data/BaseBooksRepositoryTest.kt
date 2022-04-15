@@ -20,10 +20,6 @@ abstract class BaseBooksRepositoryTest {
             return listDb
         }
 
-        override fun fetchSortBooks(): List<BookDb> {
-            return listDb
-        }
-
         override fun saveBooks(list: List<BookData>) {
             val result = mapper.mapToBookDb(list)
             listDb.clear()
@@ -34,7 +30,7 @@ abstract class BaseBooksRepositoryTest {
 
 
     protected inner class TestBooksCloudMapper(private val bookServerToDataMapper: BookServerToDataMapper): BooksCloudMapper{
-        override fun map(cloudList: List<BookServerModel>): List<Book> {
+        override fun map(cloudList: List<BookServerModel>): List<BookData> {
             return cloudList.map {
                 it.map(bookServerToDataMapper)
             }
@@ -42,17 +38,17 @@ abstract class BaseBooksRepositoryTest {
     }
 
    protected inner class TestBooksCacheMapper(val bookDbToDataMapper: BookDbToDataMapper,
-                                              val bookToBookDbMapper: BookToBookDbMapper
+                                              val bookDataToDbMapper: BookDataToDbMapper
     ): BooksCacheMapper {
-        override fun mapToData(list: List<BookDb>): List<Book> {
+        override fun mapToData(list: List<BookDb>): List<BookData> {
             return list.map {
                 it.map(bookDbToDataMapper)
             }
         }
 
-        override fun mapToBookDb(list: List<Book>): List<BookDb> {
+        override fun mapToBookDb(list: List<BookData>): List<BookDb> {
             return list.map {
-                bookToBookDbMapper.map(it.id, it.name)
+                it.mapTo(bookDataToDbMapper)
             }
         }
 
@@ -63,9 +59,9 @@ abstract class BaseBooksRepositoryTest {
     ) : BooksCloudDataSource {
         override suspend fun getBooks(): List<BookServerModel> {
             return listOf(
-                BookServerModel("0", "name0"),
-                BookServerModel("1", "name1"),
-                BookServerModel("2", "name2"),
+                BookServerModel("0", "name0", "ot"),
+                BookServerModel("1", "name1", "ot"),
+                BookServerModel("2", "name2", "ot"),
             )
         }
 

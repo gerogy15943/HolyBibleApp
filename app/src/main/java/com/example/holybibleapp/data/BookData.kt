@@ -6,7 +6,7 @@ import com.example.holybibleapp.data.cache.room.BookDb
 import com.example.holybibleapp.domain.BookDomain
 import kotlinx.coroutines.internal.LockFreeLinkedListNode
 
-class BookData(private val id: String, private val name: String, private val testament: String):
+data class BookData(private val id: String, private val name: String, private val testament: String):
     ToBookDb<BookDb,BookDataToDbMapper>,
     Abstract.Object<BookDomain, BookDataToDomainMapper>{
     override fun map(mapper: BookDataToDomainMapper): BookDomain {
