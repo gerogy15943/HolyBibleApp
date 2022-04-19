@@ -17,10 +17,13 @@ interface BooksRepository {
     ): BooksRepository {
         override suspend fun fetchBooks(): BooksData {
             try{
-                val booksCloudList = booksCloudDataSource.getBooks()
-                val books = booksCloudMapper.map(booksCloudList)
-                booksCacheDataSource.saveBooks(books)
-                val booksCacheList = booksCacheDataSource.fetchBooks()
+                var booksCacheList = booksCacheDataSource.fetchBooks()
+                if(booksCacheList.isEmpty()){
+                    val booksCloudList = booksCloudDataSource.getBooks()
+                    val books = booksCloudMapper.map(booksCloudList)
+                    booksCacheDataSource.saveBooks(books)
+                }
+                booksCacheList = booksCacheDataSource.fetchBooks()
                 return BooksData.Success(booksCacheMapper.mapToData(booksCacheList))
             } catch (e: Exception){return BooksData.Fail(e)}
         }

@@ -1,6 +1,7 @@
 package com.example.holybibleapp.domain
 
 import com.example.holybibleapp.core.Abstract
+import com.example.holybibleapp.core.Matcher
 import com.example.holybibleapp.presentation.BookUi
 
 enum class TestamentType(private val id: String): Abstract.Object<BookUi, BookDomainToUiMapper>,
