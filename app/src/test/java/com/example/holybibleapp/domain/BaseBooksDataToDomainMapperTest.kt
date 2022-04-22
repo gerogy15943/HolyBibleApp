@@ -1,15 +1,11 @@
 package com.example.holybibleapp.domain
 
-import com.example.holybibleapp.data.BookData
-import com.example.holybibleapp.data.BookDataToDomainMapper
-import com.example.holybibleapp.data.BooksData
-import com.example.holybibleapp.presentation.BaseBookDomainToUiMapper
-import com.example.holybibleapp.presentation.BookUi
-import com.example.holybibleapp.presentation.BooksUi
+import com.example.holybibleapp.data.books.BookData
+import com.example.holybibleapp.data.books.BookDataToDomainMapper
+import com.example.holybibleapp.data.books.BooksData
+import com.example.holybibleapp.domain.books.*
 import org.junit.Assert.*
 import org.junit.Test
-import retrofit2.HttpException
-import retrofit2.Response
 import java.lang.IllegalStateException
 import java.net.UnknownHostException
 
@@ -22,7 +18,7 @@ class BaseBooksDataToDomainMapperTest {
             BookData("66", "Revalation", "NT")
         ))
 
-        val actual = domain.map(BaseBooksDataToDomainMapper(object: BookDataToDomainMapper{
+        val actual = domain.map(BaseBooksDataToDomainMapper(object: BookDataToDomainMapper {
             override fun map(id: String, name: String, testament: String): BookDomain {
                 return BookDomain.Base(id, name, testament)
             }
@@ -40,7 +36,7 @@ class BaseBooksDataToDomainMapperTest {
 
     @Test
     fun test_fail(){
-        val mapper = BaseBooksDataToDomainMapper(object: BookDataToDomainMapper{
+        val mapper = BaseBooksDataToDomainMapper(object: BookDataToDomainMapper {
             override fun map(id: String, name: String, testament: String): BookDomain {
                 return BookDomain.Base(id, name, testament)
             }

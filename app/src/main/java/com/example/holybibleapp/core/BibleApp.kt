@@ -1,21 +1,19 @@
 package com.example.holybibleapp.core
 
 import android.app.Application
-import com.example.holybibleapp.data.BooksRepository
-import com.example.holybibleapp.data.BooksCloudMapper
-import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
-import com.example.holybibleapp.data.cache.BooksCacheDataSource
-import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
-import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
-import com.example.holybibleapp.data.cache.room.AppDatabase
-import com.example.holybibleapp.data.cache.room.RoomProvider
-import com.example.holybibleapp.data.net.BookServerToDataMapper
-import com.example.holybibleapp.data.net.BookService
-import com.example.holybibleapp.data.net.BooksCloudDataSource
-import com.example.holybibleapp.domain.BaseBookDataToDomainMapper
-import com.example.holybibleapp.domain.BaseBooksDataToDomainMapper
+import com.example.holybibleapp.data.books.BooksRepository
+import com.example.holybibleapp.data.books.net.BooksCloudMapper
+import com.example.holybibleapp.data.books.cache.mappers.BookDbToDataMapper
+import com.example.holybibleapp.data.books.cache.BooksCacheDataSource
+import com.example.holybibleapp.data.books.cache.mappers.BookDataToDbMapper
+import com.example.holybibleapp.data.books.cache.mappers.BooksCacheMapper
+import com.example.holybibleapp.data.books.net.BookServerToDataMapper
+import com.example.holybibleapp.data.books.net.BookService
+import com.example.holybibleapp.data.books.net.BooksCloudDataSource
+import com.example.holybibleapp.domain.books.BaseBookDataToDomainMapper
+import com.example.holybibleapp.domain.books.BaseBooksDataToDomainMapper
 import retrofit2.Retrofit
-import com.example.holybibleapp.domain.BooksInteractor
+import com.example.holybibleapp.domain.books.BooksInteractor
 import com.example.holybibleapp.presentation.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -72,7 +70,10 @@ class BibleApp: Application() {
         val resourceProvider = ResourceProvider.Base(applicationContext)
         val baseBookDomainToUiMapper = BaseBookDomainToUiMapper(resourceProvider)
         val baseBooksDomainToUiMapper = BaseBooksDomainToUiMapper(resourceProvider, baseBookDomainToUiMapper)
-        val booksInteractor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper(BaseBookDataToDomainMapper()))
+        val booksInteractor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper(
+            BaseBookDataToDomainMapper()
+        )
+        )
         val idCache = IdCache.Base(applicationContext)
         mainViewModel = MainViewModel(booksInteractor, baseBooksDomainToUiMapper, booksCommunication, UiDataCache.Base(idCache)
         )

@@ -1,13 +1,14 @@
 package com.example.holybibleapp.presentation
 
 import com.example.holybibleapp.R
-import com.example.holybibleapp.domain.BookDomain
-import com.example.holybibleapp.domain.BookDomainToUiMapper
-import com.example.holybibleapp.domain.BooksDomainToBooksUiMapper
-import com.example.holybibleapp.domain.ErrorType
+import com.example.holybibleapp.domain.books.BookDomain
+import com.example.holybibleapp.domain.books.BookDomainToUiMapper
+import com.example.holybibleapp.domain.books.BooksDomainToBooksUiMapper
+import com.example.holybibleapp.domain.books.ErrorType
 
 class BaseBooksDomainToUiMapper(private val resourceProvider: ResourceProvider,
-                                private val mapper: BookDomainToUiMapper): BooksDomainToBooksUiMapper {
+                                private val mapper: BookDomainToUiMapper
+): BooksDomainToBooksUiMapper {
     override fun map(list: List<BookDomain>): BooksUi {
         val books =  list.map {
             it.map(mapper)

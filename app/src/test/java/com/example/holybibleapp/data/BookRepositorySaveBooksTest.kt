@@ -1,9 +1,12 @@
 package com.example.holybibleapp.data
 
-import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
-import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
-import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
-import com.example.holybibleapp.data.net.BookServerToDataMapper
+import com.example.holybibleapp.data.books.BookData
+import com.example.holybibleapp.data.books.BooksData
+import com.example.holybibleapp.data.books.BooksRepository
+import com.example.holybibleapp.data.books.cache.mappers.BookDataToDbMapper
+import com.example.holybibleapp.data.books.cache.mappers.BookDbToDataMapper
+import com.example.holybibleapp.data.books.cache.mappers.BooksCacheMapper
+import com.example.holybibleapp.data.books.net.BookServerToDataMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test

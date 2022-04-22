@@ -1,13 +1,15 @@
 package com.example.holybibleapp.data
 
-import com.example.holybibleapp.data.cache.mappers.BookDbToDataMapper
-import com.example.holybibleapp.data.cache.BooksCacheDataSource
-import com.example.holybibleapp.data.cache.mappers.BookDataToDbMapper
-import com.example.holybibleapp.data.cache.mappers.BooksCacheMapper
-import com.example.holybibleapp.data.cache.room.BookDb
-import com.example.holybibleapp.data.net.BookServerModel
-import com.example.holybibleapp.data.net.BookServerToDataMapper
-import com.example.holybibleapp.data.net.BooksCloudDataSource
+import com.example.holybibleapp.data.books.BookData
+import com.example.holybibleapp.data.books.net.BooksCloudMapper
+import com.example.holybibleapp.data.books.cache.mappers.BookDbToDataMapper
+import com.example.holybibleapp.data.books.cache.BooksCacheDataSource
+import com.example.holybibleapp.data.books.cache.mappers.BookDataToDbMapper
+import com.example.holybibleapp.data.books.cache.mappers.BooksCacheMapper
+import com.example.holybibleapp.data.books.cache.room.BookDb
+import com.example.holybibleapp.data.books.net.BookServerModel
+import com.example.holybibleapp.data.books.net.BookServerToDataMapper
+import com.example.holybibleapp.data.books.net.BooksCloudDataSource
 
 abstract class BaseBooksRepositoryTest {
 
@@ -21,7 +23,7 @@ abstract class BaseBooksRepositoryTest {
         }
 
         override fun saveBooks(list: List<BookData>) {
-            val result = mapper.mapToBookDb(list)
+            val result = mapper.mapToDb(list)
             listDb.clear()
             listDb.addAll(result)
         }
@@ -29,7 +31,8 @@ abstract class BaseBooksRepositoryTest {
     }
 
 
-    protected inner class TestBooksCloudMapper(private val bookServerToDataMapper: BookServerToDataMapper): BooksCloudMapper{
+    protected inner class TestBooksCloudMapper(private val bookServerToDataMapper: BookServerToDataMapper):
+        BooksCloudMapper {
         override fun map(cloudList: List<BookServerModel>): List<BookData> {
             return cloudList.map {
                 it.map(bookServerToDataMapper)
@@ -46,9 +49,9 @@ abstract class BaseBooksRepositoryTest {
             }
         }
 
-        override fun mapToBookDb(list: List<BookData>): List<BookDb> {
+        override fun mapToDb(list: List<BookData>): List<BookDb> {
             return list.map {
-                it.mapTo(bookDataToDbMapper)
+                it.mapToDb(bookDataToDbMapper)
             }
         }
 

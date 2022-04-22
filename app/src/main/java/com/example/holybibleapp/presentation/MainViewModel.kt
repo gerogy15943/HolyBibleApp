@@ -1,13 +1,11 @@
 package com.example.holybibleapp.presentation
 
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.holybibleapp.core.Abstract
-import com.example.holybibleapp.domain.BooksDomainToBooksUiMapper
-import com.example.holybibleapp.domain.BooksInteractor
+import com.example.holybibleapp.domain.books.BooksDomainToBooksUiMapper
+import com.example.holybibleapp.domain.books.BooksInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -1,11 +1,7 @@
 package com.example.holybibleapp.presentation
 
 import android.util.Log
-import com.example.holybibleapp.R
 import com.example.holybibleapp.core.Abstract
-import com.example.holybibleapp.domain.BookDomain
-import com.example.holybibleapp.domain.BookDomainToUiMapper
-import com.example.holybibleapp.domain.ErrorType
 
 sealed class BooksUi: Abstract.Object<Unit, BooksCommunication>{
     abstract fun cache(uiDataCache: UiDataCache): BooksUi

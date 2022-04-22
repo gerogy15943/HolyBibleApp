@@ -1,8 +1,8 @@
 package com.example.holybibleapp.presentation
 
 import com.example.holybibleapp.R
-import com.example.holybibleapp.domain.BookDomainToUiMapper
-import com.example.holybibleapp.domain.ErrorType
+import com.example.holybibleapp.domain.books.BookDomainToUiMapper
+import com.example.holybibleapp.domain.books.ErrorType
 import org.junit.Assert.*
 import org.junit.Test
 import java.lang.IllegalStateException
@@ -12,7 +12,7 @@ class BaseBooksDomainToUiMapperTest {
     @Test
     fun test_fail() {
         val resourceProvider = TestResourceProvider()
-        val mapper = BaseBooksDomainToUiMapper(resourceProvider, object: BookDomainToUiMapper{
+        val mapper = BaseBooksDomainToUiMapper(resourceProvider, object: BookDomainToUiMapper {
             override fun map(id: String, name: String): BookUi {
                 throw IllegalStateException()
             }
